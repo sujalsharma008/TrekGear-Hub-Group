@@ -1,5 +1,6 @@
 const express = require("express");
 const { getDb } = require("../database/db");
+const { getId, isValidEmail } = require("../helpers");
 
 const router = express.Router();
 
@@ -24,7 +25,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const db = getDb();
-        const trekker = await db.get("SELECT * FROM trekkers WHERE id = ?", [req.params.id]);
+        const id = getId(req.params.id);
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Invalid trekker ID" });
+        }
+
+        const trekker = await db.get("SELECT * FROM trekkers WHERE id = ?", [id]);
 
         if (!trekker) {
             return res.status(404).json({ success: false, message: "Trekker not found" });
@@ -43,15 +50,40 @@ router.post("/", async (req, res) => {
         const db = getDb();
         const { name, email, phone } = req.body || {};
 
+        if (
+            typeof name !== "string" || !name.trim() ||
+            typeof email !== "string" || !email.trim()
+        ) {
+            return res.status(400).json({ success: false, message: "Name and email are required" });
+        }
+
+        if (!isValidEmail(email.trim())) {
+            return res.status(400).json({ success: false, message: "Invalid email address" });
+        }
+
+        const existing = await db.get(
+            "SELECT id FROM trekkers WHERE LOWER(email) = LOWER(?)",
+            [email.trim()]
+        );
+
+        if (existing) {
+            return res.status(409).json({ success: false, message: "Email already registered" });
+        }
+
         const result = await db.run(
             "INSERT INTO trekkers (name, email, phone) VALUES (?, ?, ?)",
-            [name, email, phone || null]
+            [name.trim(), email.trim(), phone || null]
         );
 
         res.status(201).json({
             success: true,
             message: "Trekker created successfully",
-            data: { id: result.lastID, name, email, phone: phone || null }
+            data: {
+                id: result.lastID,
+                name: name.trim(),
+                email: email.trim(),
+                phone: phone || null
+            }
         });
     } catch (error) {
         console.error(error);
@@ -63,7 +95,13 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const db = getDb();
-        const old = await db.get("SELECT * FROM trekkers WHERE id = ?", [req.params.id]);
+        const id = getId(req.params.id);
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Invalid trekker ID" });
+        }
+
+        const old = await db.get("SELECT * FROM trekkers WHERE id = ?", [id]);
 
         if (!old) {
             return res.status(404).json({ success: false, message: "Trekker not found" });
@@ -74,9 +112,29 @@ router.put("/:id", async (req, res) => {
         const email = body.email ?? old.email;
         const phone = body.phone ?? old.phone;
 
+        if (
+            typeof name !== "string" || !name.trim() ||
+            typeof email !== "string" || !email.trim()
+        ) {
+            return res.status(400).json({ success: false, message: "Name and email are required" });
+        }
+
+        if (!isValidEmail(email.trim())) {
+            return res.status(400).json({ success: false, message: "Invalid email address" });
+        }
+
+        const duplicate = await db.get(
+            "SELECT id FROM trekkers WHERE LOWER(email) = LOWER(?) AND id != ?",
+            [email.trim(), id]
+        );
+
+        if (duplicate) {
+            return res.status(409).json({ success: false, message: "Email already registered" });
+        }
+
         await db.run(
             "UPDATE trekkers SET name = ?, email = ?, phone = ? WHERE id = ?",
-            [name, email, phone || null, old.id]
+            [name.trim(), email.trim(), phone || null, id]
         );
 
         res.status(200).json({ success: true, message: "Trekker updated successfully" });
@@ -90,13 +148,19 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         const db = getDb();
-        const trekker = await db.get("SELECT id FROM trekkers WHERE id = ?", [req.params.id]);
+        const id = getId(req.params.id);
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Invalid trekker ID" });
+        }
+
+        const trekker = await db.get("SELECT id FROM trekkers WHERE id = ?", [id]);
 
         if (!trekker) {
             return res.status(404).json({ success: false, message: "Trekker not found" });
         }
 
-        const history = await db.get("SELECT id FROM rentals WHERE trekker_id = ?", [trekker.id]);
+        const history = await db.get("SELECT id FROM rentals WHERE trekker_id = ?", [id]);
 
         if (history) {
             return res.status(409).json({
@@ -105,7 +169,7 @@ router.delete("/:id", async (req, res) => {
             });
         }
 
-        await db.run("DELETE FROM trekkers WHERE id = ?", [trekker.id]);
+        await db.run("DELETE FROM trekkers WHERE id = ?", [id]);
 
         res.status(200).json({ success: true, message: "Trekker deleted successfully" });
     } catch (error) {
