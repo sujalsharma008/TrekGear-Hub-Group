@@ -1,0 +1,1671 @@
+{
+  "info": {
+    "name": "TrekGear Hub API",
+    "description": "BDF group assignment. Run on a FRESH database (delete database/trekgear.db, then npm start). Run the folders in order.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Trekkers",
+      "item": [
+        {
+          "name": "Get All Trekkers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Trekker",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Trekker - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Message is: Trekker not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Trekker not found\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers/99",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers",
+                "99"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Trekker",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Trekker created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Trekker created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Neha\", \"email\": \"neha@example.com\", \"phone\": \"9876543299\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Trekker - Invalid Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Invalid email address\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Invalid email address\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"X\", \"email\": \"bad\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Trekker - Missing Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Name and email are required\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Name and email are required\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"noname@example.com\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Trekker - Duplicate Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Message is: Email already registered\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Email already registered\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Neha Again\", \"email\": \"neha@example.com\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Trekker",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Trekker updated successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Trekker updated successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Neha Sharma\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Trekker - Invalid Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Invalid email address\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Invalid email address\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"wrong\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Trekker",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Trekker deleted successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Trekker deleted successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trekkers/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "trekkers",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Tents",
+      "item": [
+        {
+          "name": "Get All Tents",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Tent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Tent - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Message is: Tent not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent not found\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents/99",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents",
+                "99"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Tents by Size",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents?size=large",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "large"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Tents - Invalid Size",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Size must be small, medium or large\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Size must be small, medium or large\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents?size=huge",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "huge"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Tent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Tent created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Sky Dome\", \"size\": \"medium\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Tent - Invalid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Name and size are required\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Name and size are required\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"\", \"size\": \"xl\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Tent - Invalid Size",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Size must be small, medium or large\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Size must be small, medium or large\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Odd Tent\", \"size\": \"xl\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Tent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Tent updated successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent updated successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents",
+                "7"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Sky Dome 2\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Tent - Invalid Size",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Size must be small, medium or large\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Size must be small, medium or large\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents",
+                "7"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"size\": \"xl\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Tent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Tent deleted successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent deleted successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/tents/7",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tents",
+                "7"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Twist Tests (Three at a time)",
+      "item": [
+        {
+          "name": "Test 1a - Rental 1 for Asha (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Rental created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 1, \"tent_id\": 1}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Test 1b - Rental 2 for Asha (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Rental created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 1, \"tent_id\": 2}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Test 1c - Rental 3 for Asha (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Rental created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 1, \"tent_id\": 3}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Test 2 - Fourth rental for Asha (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Message is: Limit of 3 reached\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Limit of 3 reached\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 1, \"tent_id\": 4}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Test 3a - Return one rental (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Rental returned successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental returned successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/1/return",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "1",
+                "return"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Test 3b - New rental after return (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Rental created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 1, \"tent_id\": 4}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Rentals",
+      "item": [
+        {
+          "name": "Get All Rentals",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Rentals with Details (Join)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/details",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "details"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Rental",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get One Rental - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Message is: Rental not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental not found\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/99",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "99"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Rental - Missing Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Message is: Valid trekker_id and tent_id are required\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Valid trekker_id and tent_id are required\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 2}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Rental - Trekker Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Message is: Trekker not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Trekker not found\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 99, \"tent_id\": 1}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Rental - Tent Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Message is: Tent not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent not found\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 2, \"tent_id\": 99}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Rental - Damaged Tent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Message is: Damaged tent cannot be rented\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Damaged tent cannot be rented\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 2, \"tent_id\": 6}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Rental - Tent Already Rented",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Message is: Tent is not available for rental\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Tent is not available for rental\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 2, \"tent_id\": 2}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Rental for Rahul",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Message is: Rental created successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental created successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"trekker_id\": 2, \"tent_id\": 1}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Return Rental",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Rental returned successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental returned successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/5/return",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "5",
+                "return"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Return Rental - Already Returned",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test(\"Message is: This rental has already been returned\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"This rental has already been returned\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/5/return",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "5",
+                "return"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Rental",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Message is: Rental deleted successfully\", function () {",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Rental deleted successfully\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals/5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "5"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ]
+}
