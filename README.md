@@ -242,3 +242,71 @@ To run it:
 **Testing Tool:** Postman
 
 **Repository:** https://github.com/sujalsharma008/TrekGear-Hub-Group
+
+
+## 14. Viva Questions
+
+### Member 1: Nithika (Server, Routes and Database)
+
+1. **Why does `server.js` call `initializeDatabase()` before `app.listen()`?**
+   So the tables exist before the first request arrives. If the database cannot open, the server stops with an error.
+2. **What does `app.use("/api/tents", tentsRoutes)` do?**
+   It is modular routing: every request that starts with `/api/tents` goes to `routes/tents.js`. Each route file handles one resource.
+3. **What is `express.json()` used for, and what happens with broken JSON?**
+   It reads the JSON body into `req.body`. Broken JSON is caught by the error handler and returns 400 `Invalid JSON in request body`.
+4. **Which constraints are used in the tables?**
+   `PRIMARY KEY AUTOINCREMENT`, `NOT NULL`, `UNIQUE` (email), `CHECK` (condition and status values) and `FOREIGN KEY` (`rentals.trekker_id` and `rentals.tent_id`).
+5. **What happens if `trekgear.db` is deleted and the server starts again?**
+   `CREATE TABLE IF NOT EXISTS` makes a new database with the 3 tables, and the sample data (3 trekkers, 6 tents) is inserted because the tables are empty.
+
+### Member 2: Vinit Kumar Nayak (REST Endpoints)
+
+1. **Which HTTP methods and success status codes are used for tents?**
+   GET 200 (all and one), POST 201, PUT 200 and DELETE 200. A missing tent returns 404.
+2. **How does `GET /api/tents/:id` read the id, and what if it is wrong?**
+   With `req.params.id` and `getId()`. A bad id returns 400 `Invalid tent ID`, an unknown id returns 404 `Tent not found`.
+3. **What does the join endpoint return, and which SQL does it use?**
+   `GET /api/rentals/details` returns every rental with the trekker name and the tent name, using two `INNER JOIN`s on `trekker_id` and `tent_id`.
+4. **Why is `/details` written above `/:id` in `rentals.js`?**
+   Otherwise Express would read the word "details" as an id.
+5. **Why does deleting a rented tent, or a trekker with rental history, return 409?**
+   The request conflicts with the data. Deleting it would leave rentals pointing to something that no longer exists.
+
+### Member 3: Amrutha (Validation and Search)
+
+1. **How does the search by size work?**
+   `GET /api/tents?size=large` reads `req.query.size` and adds `WHERE size = ?` with the value as a parameter. Without `size`, all tents are returned.
+2. **What happens for `?size=huge`?**
+   400 with the message `Size must be small, medium or large`.
+3. **Which checks run on `POST /api/tents`?**
+   Name and size are required, size must be small, medium or large, and condition must be good or damaged. The body is read as `req.body || {}`, so a request with no body gets a 400 message instead of crashing.
+4. **How is a trekker's email validated?**
+   `isValidEmail` in `helpers.js` checks the format with a regular expression (400 `Invalid email address`). A duplicate email returns 409 `Email already registered`.
+5. **What is the difference between 400 and 409 in this project?**
+   400 means the input itself is wrong (empty name, bad email). 409 means the input is fine but conflicts with existing data (duplicate email, tent not available).
+
+### Member 4: Sujal Sharma (Twist Rule)
+
+1. **What happens on the 4th rental for the same trekker?**
+   409 Conflict with the message `Limit of 3 reached`. Nothing is inserted.
+2. **How is the limit checked?**
+   A parameterized query: `SELECT COUNT(*) FROM rentals WHERE trekker_id = ? AND status = 'active'`. If the count is 3 or more, the route returns 409.
+3. **What happens when a rental is returned?**
+   Its status becomes `returned`, the return date is filled and the tent becomes `available`. The active count drops by one, so the trekker can rent again (201).
+4. **Does one trekker's limit affect other trekkers?**
+   No. The count is made per `trekker_id`, so every trekker has their own limit.
+5. **What is a weakness of this solution, and how can it be improved?**
+   The count and the insert are separate steps, so two requests at the same moment could both pass the check. A database transaction would fix this.
+
+### Member 5: Teja Sree (Postman Collection and README)
+
+1. **What does the Postman collection contain?**
+   40 requests in 4 folders (Trekkers, Tents, Twist Tests, Rentals) with 72 test checks, including the 3 twist tests from the brief.
+2. **What do the test scripts check?**
+   `pm.test` checks the status code, and `pm.expect` checks the message, for example 409 and `Limit of 3 reached`.
+3. **Why must the database be fresh before running the collection?**
+   The requests use fixed ids from the sample data (Asha is trekker 1, tents 1 to 6). Old rentals would change the results of the twist tests.
+4. **How is the collection imported and run?**
+   Import the JSON file from the `postman/` folder into Postman, start the server, then use Run collection. All checks should pass.
+5. **What does the README explain?**
+   What the project is, the folder structure, the database tables, how to install and run it (`npm install`, `npm start`, port 5000), all API endpoints, the twist rule, validation and status codes, and how to test with Postman.
